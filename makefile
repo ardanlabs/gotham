@@ -59,7 +59,11 @@ dev-up:
 
 	kind load docker-image $(TELEPRESENCE) --name $(KIND_CLUSTER)
 
+	telepresence --context=kind-$(KIND_CLUSTER) helm install
+	telepresence --context=kind-$(KIND_CLUSTER) connect
+
 dev-down:
+	telepresence quit -s
 	kind delete cluster --name $(KIND_CLUSTER)
 
 dev-status:
