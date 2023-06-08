@@ -12,8 +12,14 @@ tidy:
 # ==============================================================================
 # Define dependencies
 
+KIND_CLUSTER    := ardan-starter-cluster
+NAMESPACE       := sales-system
+APP             := sales
+BASE_IMAGE_NAME := ardanlabs/service
 SERVICE_NAME    := sales-api
 VERSION         := 0.0.1
+SERVICE_IMAGE   := $(BASE_IMAGE_NAME)/$(SERVICE_NAME):$(VERSION)
+METRICS_IMAGE   := $(BASE_IMAGE_NAME)/$(SERVICE_NAME)-metrics:$(VERSION)
 
 # VERSION       := "0.0.1-$(shell git rev-parse --short HEAD)"
 
