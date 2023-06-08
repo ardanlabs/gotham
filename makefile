@@ -118,3 +118,9 @@ vars:
 
 vars-local:
 	curl -il localhost:4000/debug/vars
+
+test:
+	curl -il $(SERVICE_NAME).$(NAMESPACE).svc.cluster.local:3000/test
+
+test-local:
+	curl -il localhost:3000/test
