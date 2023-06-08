@@ -92,3 +92,9 @@ dev-status:
 	kubectl get nodes -o wide
 	kubectl get svc -o wide
 	kubectl get pods -o wide --watch --all-namespaces
+
+dev-describe-deployment:
+	kubectl describe deployment --namespace=$(NAMESPACE) $(APP)
+
+dev-describe-sales:
+	kubectl describe pod --namespace=$(NAMESPACE) -l app=$(APP)
