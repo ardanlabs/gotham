@@ -12,6 +12,16 @@ tidy:
 # ==============================================================================
 # Define dependencies
 
+GOLANG          := golang:1.20
+ALPINE          := alpine:3.18
+KIND            := kindest/node:v1.27.2
+POSTGRES        := postgres:15.3
+VAULT           := hashicorp/vault:1.13
+GRAFANA         := grafana/grafana:9.5.2
+PROMETHEUS      := prom/prometheus:v2.44.0
+TEMPO           := grafana/tempo:2.1.1
+TELEPRESENCE    := datawire/tel2:2.13.3
+
 KIND_CLUSTER    := ardan-starter-cluster
 NAMESPACE       := sales-system
 APP             := sales
@@ -35,3 +45,24 @@ service:
 		--build-arg BUILD_REF=$(VERSION) \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		.
+
+# ==============================================================================
+# Running from within k8s/kind
+
+dev-up:
+	kind create cluster \
+		--image $(KIND) \
+		--name $(KIND_CLUSTER) \
+		--config zarf/k8s/dev/kind-config.yaml
+
+	kubectl wait --timeout=120s --namespace=local-path-storage --for=condition=Available deployment/local-path-provisioner
+
+	kind load docker-image $(TELEPRESENCE) --name $(KIND_CLUSTER)
+
+dev-down:
+	kind delete cluster --name $(KIND_CLUSTER)
+
+dev-status:
+	kubectl get nodes -o wide
+	kubectl get svc -o wide
+	kubectl get pods -o wide --watch --all-namespaces
