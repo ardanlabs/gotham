@@ -8,3 +8,24 @@ run:
 tidy:
 	go mod tidy
 	go mod vendor
+
+# ==============================================================================
+# Define dependencies
+
+SERVICE_NAME    := sales-api
+VERSION         := 0.0.1
+
+# VERSION       := "0.0.1-$(shell git rev-parse --short HEAD)"
+
+# ==============================================================================
+# Building containers
+
+all: service
+
+service:
+	docker build \
+		-f zarf/docker/dockerfile.service \
+		-t $(SERVICE_IMAGE) \
+		--build-arg BUILD_REF=$(VERSION) \
+		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+		.
